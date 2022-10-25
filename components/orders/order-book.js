@@ -1,3 +1,5 @@
+const { createHash } = require("crypto");
+
 const { v4: uuidv4 } = require("uuid");
 
 const ORDER_CMD = {
@@ -52,6 +54,11 @@ class OrderBook {
 
     const { id, type, price, qty, symbol } = order;
     return this.newOrder(type, price, qty, symbol, id);
+  }
+
+  getOrderHash(order) {
+    const hashKey = `t_${order.type}_p_${order.price}_s_${order.symbol}_qty_${order.qty}`;
+    return createHash("md5").update(hashKey).digest("hex");
   }
 
   listOrders() {
